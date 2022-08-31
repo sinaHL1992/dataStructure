@@ -1,0 +1,57 @@
+package main
+
+import "fmt"
+
+const alphabet = 26
+
+type trie struct {
+	myTrie *Node
+}
+type Node struct {
+	nodeTrie [alphabet]*Node
+	isEnd    bool
+}
+
+func initTrie() *trie {
+	return &trie{
+		myTrie: &Node{},
+	}
+}
+func (t *trie) insert(word string) {
+	node := t.myTrie
+	for i := 0; i < len(word); i++ {
+		charIndex := word[i] - 'a'
+		if node.nodeTrie[charIndex] == nil {
+			node.nodeTrie[charIndex] = &Node{}
+		}
+		node.nodeTrie[charIndex] = t.myTrie
+	}
+	node.isEnd = true
+}
+func (t trie) search(word string) bool {
+	node := t.myTrie
+	for i := 0; i < len(word); i++ {
+		charIndex := word[i] - 'a'
+		if node.nodeTrie[charIndex] == nil {
+			return false
+		}
+		node.nodeTrie[charIndex] = t.myTrie
+	}
+
+	if node.isEnd == true {
+		return true
+	}
+	return false
+
+}
+
+func main() {
+	mytrie := initTrie()
+	fmt.Println(mytrie.myTrie)
+	var word string
+	fmt.Scan(&word)
+	mytrie.insert(word)
+	var search string
+	fmt.Scan(&search)
+	fmt.Println(mytrie.search(search))
+}
