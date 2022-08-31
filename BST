@@ -1,0 +1,90 @@
+package main
+
+import "fmt"
+
+type TreeNode struct {
+	key       int
+	rightNode *TreeNode
+	leftNode  *TreeNode
+}
+type Bst struct {
+	rootNode *TreeNode
+}
+
+func (b *Bst) insertElement(key int) {
+	var node *TreeNode
+	node = &TreeNode{key, nil, nil}
+	if b.rootNode == nil {
+		b.rootNode = node
+	} else {
+		insertTreeNode(b.rootNode, node)
+	}
+
+}
+func insertTreeNode(headNode *TreeNode, newNode *TreeNode) {
+	if newNode.key < headNode.key {
+		if headNode.leftNode == nil {
+			headNode.leftNode = newNode
+		} else {
+			insertTreeNode(headNode.leftNode, newNode)
+		}
+	} else {
+		if newNode.key > headNode.key {
+			if headNode.rightNode == nil {
+				headNode.rightNode = newNode
+			} else {
+				insertTreeNode(headNode.rightNode, newNode)
+			}
+		}
+	}
+}
+func inorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	left := inorderTraversal(root.leftNode)
+	right := inorderTraversal(root.rightNode)
+	output := make([]int, 0)
+	output = append(output, left...)
+	output = append(output, root.key)
+	output = append(output, right...)
+	return output
+
+}
+func PostorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	left := inorderTraversal(root.leftNode)
+	right := inorderTraversal(root.rightNode)
+	output := make([]int, 0)
+	output = append(output, left...)
+
+	output = append(output, right...)
+	output = append(output, root.key)
+
+	return output
+
+}
+func PreorderTraversal(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	left := inorderTraversal(root.leftNode)
+	right := inorderTraversal(root.rightNode)
+	output := make([]int, 0)
+	output = append(output, root.key)
+	output = append(output, left...)
+
+	output = append(output, right...)
+	return output
+
+}
+func main() {
+	tree := Bst{}
+	tree.insertElement(1)
+	tree.insertElement(2)
+	tree.insertElement(3)
+	fmt.Println(inorderTraversal(tree.rootNode))
+
+}
